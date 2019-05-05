@@ -1,6 +1,6 @@
 'use strict';
 module.exports.init = function (config) {
-    var conf = JSON.stringify(config);
+    var conf = config;
     function getCSS() {
         return String.raw`<style> 
             .iconFalse {
@@ -81,7 +81,7 @@ module.exports.init = function (config) {
                 </div>
             </div>
             <div layout-align="center stretch" layout="column">
-                <md-slider ng-disabled='!msg.targetValue || !msg.currentTemp' ng-change="sendVal()" class="md-primary" md-discrete ng-model="msg.userTargetValue" step="${config.sliderStep}" min="${config.sliderMinValue}" max="${config.sliderMaxValue}">
+                <md-slider md-discrete ng-disabled='!msg.targetValue || !msg.currentTemp' ng-change="sendVal()" class="md-primary" ng-model="msg.userTargetValue" step="{{config.sliderStep}}" min="{{config.sliderMinValue}}" max="{{config.sliderMaxValue}}">
             </div>
         </div>`;
     }
@@ -90,21 +90,23 @@ module.exports.init = function (config) {
         $scope.init = function (config) {
             $scope.config = config;
         };
-
+        //front->back
         $scope.toSchedule = function () {
+			debugger;
             $scope.msg.isUserCustom = false;
             $scope.msg.targetValue = $scope.msg.temp;
             $scope.send($scope.msg);
         };
-
-        $scope.sendVal = function () {
-            if (!$scope.msg.userTargetValue) {
-                $scope.msg.userTargetValue == $scope.config.sliderMinValue;
+        //front->back
+        $scope.sendVal = function () {debugger;
+            if (!$scope.msg.userTargetValue) { 
+                $scope.msg.userTargetValue = $scope.config.sliderMinValue;
             }
             $scope.msg.targetValue = $scope.msg.userTargetValue;
             $scope.msg.isUserCustom = true;
             $scope.send($scope.msg);
         };
+        //front->back
         $scope.lockCustom = function () {
             if ($scope.msg) {
                 $scope.msg.isUserCustomLocked = !$scope.msg.isUserCustomLocked;
